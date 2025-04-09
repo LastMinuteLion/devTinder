@@ -1,15 +1,16 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const {AsyncHandler, ErrorHandler} = require("../utils/handlers")
 
-const userAuth = async (req, res, next) => {
+const userAuth = AsyncHandler(async (req, res, next) => {
     try {
         const { token } = req.cookies;
 
         if (!token) {
-            throw new Error("Token is not valid!");
+            throw new ErrorHandler("Token is not valid!, Please login to continue");
         }
 
-        const decodedObj = jwt.verify(token, "DEV@tinder"); // No need for `await` here
+        const decodedObj = jwt.verify(token, "devtinder"); 
         const { _id } = decodedObj;
 
         const user = await User.findById(_id);
@@ -17,13 +18,11 @@ const userAuth = async (req, res, next) => {
             throw new Error("User not found.");
         }
 
-        req.user = user; // Attach user to request for access in route
-        next(); // Move to next middleware or route
+        req.user = user; 
+        next(); 
     } catch (error) {
         res.status(401).json({ error: "Invalid or expired token. Please login again." });
     }
-};
+});
 
-module.exports = {
-    userAuth,
-};
+module.exports = { userAuth };
