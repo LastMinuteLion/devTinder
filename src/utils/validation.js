@@ -38,6 +38,19 @@ const validateSignUpData = (req) => {
     }
 };
 
+
+const validateLogin = (req) => {
+    const {emailId, password} = req;
+
+    if(!validator.isEmail(emailId)){
+        throw new ErrorHandler("Please provide a valid email address", 400);
+    }
+
+    if(!password){
+        throw new ErrorHandler("Password is wrong", 400);
+    }
+}
+
 const validateEditProfile = (data) => {
     const allowedFieldsToEdit = ["gender", "age", "about", "skills", "photoUrl"];
     const isAllowed = Object.keys(data).every((field) => allowedFieldsToEdit.includes(field));

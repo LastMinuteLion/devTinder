@@ -1,10 +1,15 @@
+// src/config/database.js
 const mongoose = require('mongoose');
+const { dbUri } = require('./config');
 
 const connectDb = async () => {
-    await mongoose.connect(
-        "mongodb+srv://harsh20033:HarshV2003!@cluster0.bnvtidp.mongodb.net/devTinder"
-    );
+    try {
+        await mongoose.connect(dbUri);
+        console.log('✅ Database connection established successfully!');
+    } catch (err) {
+        console.error('❌ Failed to connect to the database:', err);
+        throw err;
+    }
 };
 
 module.exports = connectDb;
-

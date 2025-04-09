@@ -4,6 +4,8 @@ const cookieParser = require("cookie-parser");
 const errorMiddleware = require('./middlewares/error');
 const notfoundMiddleware = require('./middlewares/noRouteFound');
 const { AsyncHandler, ErrorHandler } = require('./utils/handlers');
+const { port } = require('./config/config');
+
 // Routers
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
@@ -21,22 +23,24 @@ app.use(cookieParser());
 
 
 app.use("/api/auth", authRouter);
-app.use("/api/profile", profileRouter);
-app.use("/api/request", requestRouter);
-app.use("/api/user", userRouter);
-app.use("/api/health", healthRouter);
-app.use("/api/message", messageRouter);
+// app.use("/api/profile", profileRouter);
+// app.use("/api/request", requestRouter);
+// app.use("/api/user", userRouter);
+// app.use("/api/health", healthRouter);
+// app.use("/api/message", messageRouter);
 
 app.use(notfoundMiddleware);
 app.use(errorMiddleware);
 
-connectDb()
-    .then(() => {
-        console.log('✅ Database connection established successfully!');
-        app.listen(3000, () => {
-            console.log('🚀 Server is running on PORT 3000');
+const startServer = async () => {
+    try {
+        await connectDb();
+        app.listen(port, () => {
+            console.log(`🚀 Server is running on PORT ${port}`);
         });
-    })
-    .catch((err) => {
-        console.error('❌ Failed to connect to the database:', err);
-    });
+    } catch (err) {
+        console.error('❌ Server failed to start:', err);
+    }
+};
+
+startServer();

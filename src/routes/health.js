@@ -1,6 +1,6 @@
-const express = require('express');
-const healthRouter = express.Router();
+// const express = require('express');
+// const healthRouter = express.Router();
 
-healthRouter.get("/");
+// healthRouter.get("/");
 
-module.exports = healthRouter;
+// module.exports = healthRouter;
