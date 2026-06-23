@@ -148,6 +148,7 @@ dist
 
 ### dotenv ###
 .env
+
 .env.development
 .env.production
 
