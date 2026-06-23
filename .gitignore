@@ -146,7 +146,6 @@ dist
 # Edit at https://www.toptal.com/developers/gitignore?templates=dotenv
 
 ### dotenv ###
-.env
 .env.development
 .env.production
 
