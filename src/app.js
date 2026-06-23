@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/database');
 const app = express();
@@ -8,7 +9,6 @@ app.use(cors({
     origin: "http://localhost:5174",
     credentials: true
 })); 
-require('dotenv').config();
 app.use(express.json());
 app.use(cookieParser());
 
