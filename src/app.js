@@ -4,9 +4,10 @@ const connectDB = require('./config/database');
 const app = express();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const http = require("http");
 
 app.use(cors({
-    origin: "http://localhost:5174",
+    origin: "http://localhost:5173",
     credentials: true
 })); 
 app.use(express.json());
@@ -16,22 +17,31 @@ const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
 const userRouter = require('./routes/user');
+const initializeSocket = require('./utils/socket');
+const chatRouter = require('./routes/chat');
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
+app.use("/", chatRouter);
 
-connectDB().then(() => {
-    console.log('Connected to MongoDB');
-}).catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
+const server = http.createServer(app);
+initializeSocket(server);
+
+connectDB()
+  .then(() => {
+    console.log("Connected to MongoDB");
+
+    server.listen(process.env.PORT, () => {
+      console.log(`Server is running on port ${process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB:", err);
+    process.exit(1);
+  });
+
+app.use((req, res) => {
+  res.status(404).send("Route not found");
 });
-
-app.use((req,res) => {
-    res.send('Hello from the server!');
-});
-
-app.listen(process.env.PORT, () => {
-    console.log('Server is running on port 3000');
-}); 
